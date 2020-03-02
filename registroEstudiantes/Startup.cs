@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using registroEstudiantes.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using registroEstudiantes.Models;
 
 namespace registroEstudiantes
 {
@@ -34,6 +35,9 @@ namespace registroEstudiantes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDbContext<registroEstudiantesContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
