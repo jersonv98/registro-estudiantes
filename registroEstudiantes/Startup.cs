@@ -41,14 +41,20 @@ namespace registroEstudiantes
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // METODO PARA MANEJAR CLASES PROPIAS (ApplicationUser, ApplicationRole) Y NO LAS DEL FRAMEWORK
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+                options.Stores.MaxLengthForKeys = 128)
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultUI().AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -73,6 +79,9 @@ namespace registroEstudiantes
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // LLAMANDO AL METODO Initialize DE LA CLASE DummyData PARA QUE SE INICIALICE
+            DummyData.Initialize(context, userManager, roleManager).Wait();
         }
     }
 }
