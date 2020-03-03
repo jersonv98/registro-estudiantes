@@ -10,87 +10,86 @@ using registroEstudiantes.Models;
 
 namespace registroEstudiantes.Controllers
 {
-    [Authorize(Roles = "admin,docente,estudiante")]
-    public class MateriasController : Controller
+    [Authorize(Roles = "admin")]
+    public class AspNetRolesController : Controller
     {
         private readonly registroEstudiantesContext _context;
 
-        public MateriasController(registroEstudiantesContext context)
+        public AspNetRolesController(registroEstudiantesContext context)
         {
             _context = context;
         }
 
-        // GET: Materias
+        // GET: AspNetRoles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Materias.ToListAsync());
+            return View(await _context.AspNetRoles.ToListAsync());
         }
 
-        // GET: Materias/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: AspNetRoles/Details/5
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var materias = await _context.Materias
-                .FirstOrDefaultAsync(m => m.IdMateria == id);
-            if (materias == null)
+            var aspNetRoles = await _context.AspNetRoles
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (aspNetRoles == null)
             {
                 return NotFound();
             }
 
-            return View(materias);
+            return View(aspNetRoles);
         }
 
-        // GET: Materias/Create
-        [Authorize(Roles = "admin,docente")]
+        // GET: AspNetRoles/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Materias/Create
+        // POST: AspNetRoles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMateria,Nombre,Nivel")] Materias materias)
+        public async Task<IActionResult> Create([Bind("Id,Name,NormalizedName,ConcurrencyStamp,CreationDate")] AspNetRoles aspNetRoles)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(materias);
+                _context.Add(aspNetRoles);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(materias);
+            return View(aspNetRoles);
         }
 
-        // GET: Materias/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: AspNetRoles/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var materias = await _context.Materias.FindAsync(id);
-            if (materias == null)
+            var aspNetRoles = await _context.AspNetRoles.FindAsync(id);
+            if (aspNetRoles == null)
             {
                 return NotFound();
             }
-            return View(materias);
+            return View(aspNetRoles);
         }
 
-        // POST: Materias/Edit/5
+        // POST: AspNetRoles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdMateria,Nombre,Nivel")] Materias materias)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,NormalizedName,ConcurrencyStamp,CreationDate")] AspNetRoles aspNetRoles)
         {
-            if (id != materias.IdMateria)
+            if (id != aspNetRoles.Id)
             {
                 return NotFound();
             }
@@ -99,12 +98,12 @@ namespace registroEstudiantes.Controllers
             {
                 try
                 {
-                    _context.Update(materias);
+                    _context.Update(aspNetRoles);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MateriasExists(materias.IdMateria))
+                    if (!AspNetRolesExists(aspNetRoles.Id))
                     {
                         return NotFound();
                     }
@@ -115,41 +114,41 @@ namespace registroEstudiantes.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(materias);
+            return View(aspNetRoles);
         }
 
-        // GET: Materias/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: AspNetRoles/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var materias = await _context.Materias
-                .FirstOrDefaultAsync(m => m.IdMateria == id);
-            if (materias == null)
+            var aspNetRoles = await _context.AspNetRoles
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (aspNetRoles == null)
             {
                 return NotFound();
             }
 
-            return View(materias);
+            return View(aspNetRoles);
         }
 
-        // POST: Materias/Delete/5
+        // POST: AspNetRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var materias = await _context.Materias.FindAsync(id);
-            _context.Materias.Remove(materias);
+            var aspNetRoles = await _context.AspNetRoles.FindAsync(id);
+            _context.AspNetRoles.Remove(aspNetRoles);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MateriasExists(int id)
+        private bool AspNetRolesExists(string id)
         {
-            return _context.Materias.Any(e => e.IdMateria == id);
+            return _context.AspNetRoles.Any(e => e.Id == id);
         }
     }
 }

@@ -10,7 +10,7 @@ using registroEstudiantes.Models;
 
 namespace registroEstudiantes.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin,estudiante")]
     public class EstudiantesController : Controller
     {
         private readonly registroEstudiantesContext _context;
